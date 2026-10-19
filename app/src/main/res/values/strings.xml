@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VulnBank</string>
+
+    <!--
+        VULN (M1/M10): secrets duplicated into resources too, a common real-world
+        mistake - some devs think "it's just a resource" is safer than a .java
+        constant. It is not: aapt compiles this straight into resources.arsc,
+        readable with `apktool d` or jadx without any decompilation.
+    -->
+    <string name="support_api_token">sk_support_9f8e7d6c5b4a</string>
+</resources>

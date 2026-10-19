@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.vulnbank.app">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--
+        VULN (M8 - Security Misconfiguration):
+        android:usesCleartextTraffic="true" allows plaintext HTTP for the whole app.
+        android:allowBackup="true" lets `adb backup` dump app data (incl. the local DB) without root.
+        android:debuggable is left to the debug build type (see build.gradle) -> CWE-919 / M7.
+    -->
+    <application
+        android:allowBackup="true"
+        android:usesCleartextTraffic="true"
+        android:label="VulnBank"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:theme="@style/Theme.VulnBank">
+
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+            VULN (M1 - Improper Credential Usage / Insecure Authorization):
+            BalanceActivity is exported with no permission check and no verification
+            that the user actually authenticated. Any app on the device (or `adb shell am start`)
+            can launch it directly and skip the login screen entirely.
+        -->
+        <activity
+            android:name=".BalanceActivity"
+            android:exported="true" />
+
+        <!--
+            VULN (M1 / M4 - exported ContentProvider with no permission, path traversal possible):
+            Any app can query the bank's local accounts database directly, bypassing the UI/auth.
+        -->
+        <provider
+            android:name=".AccountProvider"
+            android:authorities="com.vulnbank.app.provider"
+            android:exported="true" />
+
+    </application>
+</manifest>

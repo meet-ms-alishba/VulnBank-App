@@ -1,0 +1,39 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.vulnbank.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.vulnbank.app"
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            // VULN: no ProGuard/R8 shrinking or obfuscation -> M7 Insufficient Binary Protections
+            minifyEnabled false
+            shrinkResources false
+        }
+        debug {
+            // VULN: debuggable build shipped as "release-like" artifact -> M7 / M8
+            debuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.sqlite:sqlite:2.4.0'
+}

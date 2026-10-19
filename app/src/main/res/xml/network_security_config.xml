@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    VULN (M5 - Insecure Communication):
+    cleartextTrafficPermitted="true" for the API domain allows plain HTTP.
+    Combined with TrustAllManager.java (which disables certificate validation),
+    this app is fully vulnerable to MITM interception, e.g. via Burp Suite / mitmproxy.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">api.vulnbank.local</domain>
+    </domain-config>
+</network-security-config>
